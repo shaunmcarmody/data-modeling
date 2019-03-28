@@ -1,16 +1,8 @@
 // Manage Roles (id, name)
 const express = require('express');
 const helmet = require('helmet');
-const knex = require('knex');
-
-const knexConfig = {
-  client: 'sqlite3',
-  connection: {
-    filename: './data/rolex.db3',
-  },
-  useNullAsDefault: true, // needed for sqlite
-};
-const db = knex(knexConfig);
+const db = require('./data/dbConfig.js');
+const Roles = require('./roles/roles-model');
 
 const server = express();
 
@@ -21,7 +13,7 @@ server.use(express.json());
 server.get('/api/roles', async (req, res) => {
   // get the roles from the database
   try {
-    const roles = await db('roles'); // all the records from the table
+    const roles = await Roles.find();
     res.status(200).json(roles);
   } catch (error) {
     res.status(500).json(error);
